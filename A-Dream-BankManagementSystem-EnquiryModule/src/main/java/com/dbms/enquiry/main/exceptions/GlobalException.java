@@ -35,5 +35,11 @@ public class GlobalException {
 			ErrorResponseDTO errorResponse = new ErrorResponseDTO(e.getMessage(), LocalDateTime.now(), null);
 		    return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		
+		@ExceptionHandler(EnquiryNotFoundException.class)
+		public ResponseEntity<ErrorResponseDTO> handleException(EnquiryNotFoundException e) {
+			ErrorResponseDTO errorResponse = new ErrorResponseDTO(e.getMessage(), LocalDateTime.now(), null);
+		    return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+		}
 	}
 
