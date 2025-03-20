@@ -40,7 +40,7 @@ public class EnquiryDetails {
 	
 	@NotNull(message = "You Can Not Take The Enquiry FullName Is Null !!!")
 	@NotBlank(message = "Enquiry FullName Can Not Be Blank")
-	 @Size(min = 3, max = 15, message = "Enquiry FullName Must Be Between 3 And 15 Characters")
+	 @Size(min = 5, max = 20, message = "Enquiry FullName Must Be Between 3 And 15 Characters")
     @Pattern(regexp = "^[A-Za-z ]+$", message = "Enquiry FullName Must Contain Only Letters And Spaces")
 	private String fullName;
 	
@@ -50,8 +50,8 @@ public class EnquiryDetails {
 	 
 	private String emailId;
 	
-	 @Min(value = 9999999999l, message = "Enter Valid Contact Number")
-	 @Max(value = 9999999999l, message = "Enter Valid Contact Number")
+	 //@Min(value = 9999999999l, message = "Enter Valid Contact Number")
+	 //@Max(value = 7777777777l, message = "Enter Valid Contact Number")
 	private long contactNO;
 	
 	@Pattern(regexp = "^[A-Za-z0-9 ]+$", message = "PanCard Must Contain Only Letters, Numbers, And Spaces")

@@ -3,6 +3,7 @@ package com.dbms.enquiry.main.serviceImpl;
 import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,6 +66,12 @@ public class MainServiceImpl implements MainServiceInterface {
 	        
 	        return savedEnquiry;
 	    }
+
+	@Override
+	public List<EnquiryDetails> getAllEnquiry() {
+		// TODO Auto-generated method stub
+		return enquiryRepository.findAll();
+	}
 	}
 
 
