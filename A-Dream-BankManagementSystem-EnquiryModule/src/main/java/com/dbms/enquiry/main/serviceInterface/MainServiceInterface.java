@@ -12,4 +12,6 @@ public interface MainServiceInterface {
 
 public List<EnquiryDetails> getAllEnquiry();
 
+public EnquiryDetails getEnquiryByID(int id);
+
 }

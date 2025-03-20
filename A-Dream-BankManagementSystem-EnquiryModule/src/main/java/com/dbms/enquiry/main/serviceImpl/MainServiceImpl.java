@@ -72,6 +72,12 @@ public class MainServiceImpl implements MainServiceInterface {
 		// TODO Auto-generated method stub
 		return enquiryRepository.findAll();
 	}
+
+	@Override
+	public EnquiryDetails getEnquiryByID(int id) {
+		
+		return enquiryRepository.findById(id).get() ;
+	}
 	}
 
 
