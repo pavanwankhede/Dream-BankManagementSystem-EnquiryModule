@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.dbms.enquiry.main.enums.EnquiryStatus;
 import com.dbms.enquiry.main.exceptions.EnquiryNotFoundException;
 import com.dbms.enquiry.main.model.CibilDetails;
 import com.dbms.enquiry.main.model.EnquiryDetails;
@@ -72,7 +73,7 @@ public class MainServiceImpl implements MainServiceInterface {
 
 	@Override
 	public List<EnquiryDetails> getAllEnquiry() {
-		// TODO Auto-generated method stub
+		
 		return enquiryRepository.findAll();
 	}
 
@@ -81,13 +82,41 @@ public class MainServiceImpl implements MainServiceInterface {
 		
 		Optional<EnquiryDetails> enquiry=enquiryRepository.findById(id);
 		
-		if (enquiry !=null) {
+		if (enquiry.isEmpty()) {
 			
 		throw new EnquiryNotFoundException("Enquiry for the Id- "+id+" Is not Found");
 		}
 		
 		
 		return enquiry.get() ;
+	}
+
+	@Override
+	public EnquiryDetails changeEnquiryStatus(int id, EnquiryStatus newStatus) {
+	    EnquiryDetails enquiryDetails = getEnquiryByID(id);
+
+	    if (enquiryDetails != null) {
+	        // Store previous status before updating
+	        EnquiryStatus previousStatus = enquiryDetails.getEnquriyStatus();
+
+	        // Update the status
+	        enquiryDetails.setEnquriyStatus(newStatus);
+	        EnquiryDetails updatedEnquiry = enquiryRepository.save(enquiryDetails);
+	        log.info("Enquiry status updated successfully: {}", updatedEnquiry);
+
+	        // Send status update email with correct previous and new status
+	        try {
+	            emailDetails.sendEnquiryStatusUpdate(updatedEnquiry, previousStatus, newStatus);
+	            log.info("Enquiry status update confirmation email sent successfully.");
+	        } catch (Exception e) {
+	            log.error("Failed to send enquiry status update email: {}", e.getMessage(), e);
+	        }
+
+	        return updatedEnquiry;
+	    } else {
+	        log.error("Enquiry with ID " + id + " not found.");
+	        throw new EnquiryNotFoundException("Enquiry with ID " + id + " not found.");
+	    }
 	}
 	}
 
