@@ -17,4 +17,8 @@ public EnquiryDetails getEnquiryByID(int id);
 
 public EnquiryDetails changeEnquiryStatus(int id, EnquiryStatus status);
 
+public boolean deleteEnquiryByID(int id);
+
+ 
+
 }

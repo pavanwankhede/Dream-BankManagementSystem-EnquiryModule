@@ -1,5 +1,6 @@
 package com.dbms.enquiry.main.controller;
 
+import java.io.ObjectInputFilter.Status;
 import java.sql.Time;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +29,8 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/user-enquiry")
 public class MainController {
-        
+   
+	
 	@Autowired
 	  private MainServiceInterface serviceInterface;
 	
@@ -67,4 +70,28 @@ public class MainController {
 		EnquiryDetails enquiryDetails=serviceInterface.changeEnquiryStatus(id,status);
 		return new ResponseEntity<EnquiryDetails>(enquiryDetails,HttpStatus.OK);
 	}
+	
+	  
+	@DeleteMapping("/deleteById/{enquriyId}")
+	public ResponseEntity<String> deleteEnquiryByID(@PathVariable("enquriyId") int id){
+		
+		  boolean delete= serviceInterface.deleteEnquiryByID(id);
+		  if(delete)
+		  {
+			  return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		  }else
+		  {
+				return new ResponseEntity<String>("Enquiry Not Found",HttpStatus.NOT_FOUND);
+		  }
+			  
+	
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 }
