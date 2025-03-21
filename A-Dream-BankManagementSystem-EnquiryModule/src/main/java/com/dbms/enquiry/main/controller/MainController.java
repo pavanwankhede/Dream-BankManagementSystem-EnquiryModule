@@ -1,5 +1,6 @@
 package com.dbms.enquiry.main.controller;
 
+import java.io.ObjectInputFilter.Status;
 import java.sql.Time;
 import java.util.Date;
 import java.util.List;
@@ -10,13 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dbms.enquiry.main.enums.EnquiryStatus;
 import com.dbms.enquiry.main.model.EnquiryDetails;
 import com.dbms.enquiry.main.serviceInterface.MainServiceInterface;
 
@@ -25,7 +29,8 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/user-enquiry")
 public class MainController {
-        
+   
+	
 	@Autowired
 	  private MainServiceInterface serviceInterface;
 	
@@ -53,10 +58,40 @@ public class MainController {
 		
 	}
 	
-	@GetMapping("/get_byID/{enquriyId}")
+	@GetMapping("/getById/{enquriyId}")
 	public ResponseEntity<EnquiryDetails> getEnquiryByID(@PathVariable("enquriyId") int id){
 		
 		EnquiryDetails enquiryDetails= serviceInterface.getEnquiryByID(id);
 		return new ResponseEntity<EnquiryDetails>(enquiryDetails,HttpStatus.OK);
 	}
+	
+	@PatchMapping("/updateEnquiryStatus/{enquriyId}/{enquriyStatus}")
+	public ResponseEntity<EnquiryDetails> updateEnquiry(@PathVariable("enquriyId")int id,@PathVariable("enquriyStatus")EnquiryStatus status){
+		EnquiryDetails enquiryDetails=serviceInterface.changeEnquiryStatus(id,status);
+		return new ResponseEntity<EnquiryDetails>(enquiryDetails,HttpStatus.OK);
+	}
+	
+	  
+	@DeleteMapping("/deleteById/{enquriyId}")
+	public ResponseEntity<String> deleteEnquiryByID(@PathVariable("enquriyId") int id){
+		
+		  boolean delete= serviceInterface.deleteEnquiryByID(id);
+		  if(delete)
+		  {
+			  return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		  }else
+		  {
+				return new ResponseEntity<String>("Enquiry Not Found",HttpStatus.NOT_FOUND);
+		  }
+			  
+	
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 }
