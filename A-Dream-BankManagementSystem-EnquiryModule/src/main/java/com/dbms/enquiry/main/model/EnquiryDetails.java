@@ -17,6 +17,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -48,10 +49,12 @@ public class EnquiryDetails {
 	 @Max(value = 60, message = "Age Must be At Most 60/ year. Please Enter Valid Age")
 	private int age;
 	 
-	private String emailId;
+	 @Email(message = "Invalid email format")
+	 @NotBlank(message = "Email is required")
+	 private String emailId;
 	
-	 //@Min(value = 9999999999l, message = "Enter Valid Contact Number")
-	 //@Max(value = 7777777777l, message = "Enter Valid Contact Number")
+	@Min(value = 1000000000L, message = "Enter a valid contact number")
+	@Max(value = 9999999999L, message = "Enter a valid contact number")
 	private long contactNO;
 	
 	@Pattern(regexp = "^[A-Za-z0-9 ]+$", message = "PanCard Must Contain Only Letters, Numbers, And Spaces")

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.dbms.enquiry.main.enums.EnquiryStatus;
 import com.dbms.enquiry.main.exceptions.EnquiryNotFoundException;
 import com.dbms.enquiry.main.model.CibilDetails;
+import com.dbms.enquiry.main.model.CibilScoreUtil;
 import com.dbms.enquiry.main.model.EnquiryDetails;
 import com.dbms.enquiry.main.repository.CibilRepository;
 import com.dbms.enquiry.main.repository.EnquiryRepository;
@@ -50,6 +51,8 @@ public class MainServiceImpl implements MainServiceInterface {
 	        CibilDetails cibilDetails = enquiries.getCibilDetails();
 	        if (cibilDetails != null) {
 	        	cibilDetails.setCibilGeneratedDateTime(LocalDateTime.now()); 
+	        	 cibilDetails.setScoreCategories(CibilScoreUtil.getScoreCategory(cibilDetails.getCibilScore()));
+	        	 cibilDetails.setRemarks(CibilScoreUtil.getRemarks(cibilDetails.getCibilScore()));
 	            cibilDetails = cibilRepository.save(cibilDetails);
 	            enquiries.setCibilDetails(cibilDetails);
 	        }
