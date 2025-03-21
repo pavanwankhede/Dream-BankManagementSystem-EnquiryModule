@@ -73,7 +73,7 @@ public class MainServiceImpl implements MainServiceInterface {
 
 	@Override
 	public List<EnquiryDetails> getAllEnquiry() {
-		// TODO Auto-generated method stub
+		
 		return enquiryRepository.findAll();
 	}
 
@@ -92,31 +92,31 @@ public class MainServiceImpl implements MainServiceInterface {
 	}
 
 	@Override
-	public EnquiryDetails changeEnquiryStatus(int id, EnquiryStatus status) {
-		EnquiryDetails enquiryStatus=getEnquiryByID(id);
-		if(enquiryStatus !=null) {
-			enquiryStatus.setEnquriyStatus(status);
-			
-			EnquiryDetails updatedEnquiry = enquiryRepository.save(enquiryStatus);
+	public EnquiryDetails changeEnquiryStatus(int id, EnquiryStatus newStatus) {
+	    EnquiryDetails enquiryDetails = getEnquiryByID(id);
+
+	    if (enquiryDetails != null) {
+	        // Store previous status before updating
+	        EnquiryStatus previousStatus = enquiryDetails.getEnquriyStatus();
+
+	        // Update the status
+	        enquiryDetails.setEnquriyStatus(newStatus);
+	        EnquiryDetails updatedEnquiry = enquiryRepository.save(enquiryDetails);
 	        log.info("Enquiry status updated successfully: {}", updatedEnquiry);
 
-	        // Send confirmation email after status update
+	        // Send status update email with correct previous and new status
 	        try {
-	            // Check if CibilDetails are available and pass them along with the enquiry to the email service
-	            emailDetails.sendEnquiryConfirmationStatus(updatedEnquiry, updatedEnquiry.getCibilDetails());
+	            emailDetails.sendEnquiryStatusUpdate(updatedEnquiry, previousStatus, newStatus);
 	            log.info("Enquiry status update confirmation email sent successfully.");
 	        } catch (Exception e) {
 	            log.error("Failed to send enquiry status update email: {}", e.getMessage(), e);
 	        }
-	        
-	        // Return the updated enquiry
+
 	        return updatedEnquiry;
 	    } else {
 	        log.error("Enquiry with ID " + id + " not found.");
 	        throw new EnquiryNotFoundException("Enquiry with ID " + id + " not found.");
 	    }
-		
-		//return enquiryRepository.save(enquiryStatus);
 	}
 	}
 
