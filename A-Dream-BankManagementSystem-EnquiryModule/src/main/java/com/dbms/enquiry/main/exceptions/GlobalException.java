@@ -41,5 +41,11 @@ public class GlobalException {
 			ErrorResponseDTO errorResponse = new ErrorResponseDTO(e.getMessage(), LocalDateTime.now(), null);
 		    return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
 		}
+		
+		@ExceptionHandler(NoEnquiryFoundForStatusException.class)
+		public ResponseEntity<ErrorResponseDTO> handleNoEnquiryForStatusException(NoEnquiryFoundForStatusException e) {
+			ErrorResponseDTO errorResponse = new ErrorResponseDTO(e.getMessage(), LocalDateTime.now(), null);
+		    return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+		}
 	}
 

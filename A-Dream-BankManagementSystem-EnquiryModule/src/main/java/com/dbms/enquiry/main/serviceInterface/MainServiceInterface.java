@@ -19,6 +19,8 @@ public EnquiryDetails changeEnquiryStatus(int id, EnquiryStatus status);
 
 public boolean deleteEnquiryByID(int id);
 
+public List<EnquiryDetails> getEnquiryByStatus(EnquiryStatus status);
+
  
 
 }

@@ -87,8 +87,15 @@ public class MainController {
 	}
 	
 	
-	
-	
+	@GetMapping("/getEnquiryByEnquiryStatus/{enquriyStatus}")
+	public ResponseEntity<List<EnquiryDetails>>  getByEnquiryStatus(@PathVariable("enquriyStatus")EnquiryStatus status)
+	{
+		log.info("Recieved request to fine Enquiry by Enquiry status:{}",status);
+		List<EnquiryDetails> enquiryBystatus=serviceInterface.getEnquiryByStatus(status);
+		log.info("Enquiry by EnquiryStatus:");
+		return new ResponseEntity<List<EnquiryDetails>>(enquiryBystatus,HttpStatus.OK);
+		
+	}
 	
 	
 	

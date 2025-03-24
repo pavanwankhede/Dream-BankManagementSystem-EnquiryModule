@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.dbms.enquiry.main.enums.EnquiryStatus;
 import com.dbms.enquiry.main.exceptions.EnquiryNotFoundException;
+import com.dbms.enquiry.main.exceptions.NoEnquiryFoundForStatusException;
 import com.dbms.enquiry.main.model.CibilDetails;
 import com.dbms.enquiry.main.model.CibilScoreUtil;
 import com.dbms.enquiry.main.model.EnquiryDetails;
@@ -132,6 +133,16 @@ public class MainServiceImpl implements MainServiceInterface {
 		}
 		
 		return false;
+	}
+
+	@Override
+	public List<EnquiryDetails> getEnquiryByStatus(EnquiryStatus status) {
+		List<EnquiryDetails> enquires= enquiryRepository.findByEnquriyStatus(status);
+		 if (enquires.isEmpty() ) {
+	            throw new NoEnquiryFoundForStatusException("No enquiries found with status: "+status);
+	        }
+		return enquires;
+
 	}
 
 	 
