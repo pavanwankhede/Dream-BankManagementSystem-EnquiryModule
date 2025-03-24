@@ -98,6 +98,11 @@ public class MainController {
 	}
 	
 	
-	
+	@PatchMapping("/updateEnquiry/{enquiryId}")
+	public ResponseEntity<EnquiryDetails> updateEnquiry(@PathVariable("enquiryId") int enquiryId) {
+	    EnquiryDetails updatedEnquiry = serviceInterface.updateSetCibilDetail(enquiryId);
+	    return new ResponseEntity<>(updatedEnquiry, HttpStatus.OK);
+	}
+
 	
 }

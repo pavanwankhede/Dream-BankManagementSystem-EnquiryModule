@@ -20,6 +20,7 @@ import com.dbms.enquiry.main.model.CibilScoreUtil;
 import com.dbms.enquiry.main.model.EnquiryDetails;
 import com.dbms.enquiry.main.repository.CibilRepository;
 import com.dbms.enquiry.main.repository.EnquiryRepository;
+import com.dbms.enquiry.main.serviceInterface.CibilScoreFetcher;
 import com.dbms.enquiry.main.serviceInterface.EmailDetails;
 import com.dbms.enquiry.main.serviceInterface.MainServiceInterface;
 
@@ -38,6 +39,9 @@ public class MainServiceImpl implements MainServiceInterface {
 	
 	@Autowired
 	private CibilRepository cibilRepository;
+	
+	@Autowired
+	CibilScoreFetcher cibilScoreFetcher;
 
 	@Override
 	public EnquiryDetails saveEnquiriesData(@Valid EnquiryDetails enquiries) {
@@ -146,6 +150,39 @@ public class MainServiceImpl implements MainServiceInterface {
 	}
 
 	 
+	@Override
+	public EnquiryDetails updateSetCibilDetail(int enquiryId) {
+		
+		    // Fetch the existing enquiry
+	        EnquiryDetails existingEnquiry = enquiryRepository.findById(enquiryId)
+	            .orElseThrow(() -> new RuntimeException("Enquiry with ID " + enquiryId + " not found."));
+
+	        // Generate and update CIBIL Score if not already present
+	        if (existingEnquiry.getCibilDetails() == null) {
+	            CibilDetails cibilDetails = new CibilDetails();
+
+	            // Fetch CIBIL score
+	            Long generatedScore = cibilScoreFetcher.fetchCibilScore(existingEnquiry.getPanCardNo());
+
+	            // If fetched score is invalid, generate a random one
+	            if (generatedScore == null || generatedScore == 0) {  
+	                generatedScore = CibilScoreUtil.generateRandomCibilScore();
+	            }
+
+	            // Set generated values
+	            cibilDetails.setCibilScore(generatedScore);
+	            cibilDetails.setScoreCategories(CibilScoreUtil.getScoreCategory(generatedScore));
+	            cibilDetails.setRemarks(CibilScoreUtil.getRemarks(generatedScore));
+	            cibilDetails.setCibilGeneratedDateTime(LocalDateTime.now());
+
+	            // Set CIBIL details in enquiry
+	            existingEnquiry.setCibilDetails(cibilDetails);
+	        }
+
+	        // Save updated enquiry
+	        return enquiryRepository.save(existingEnquiry);
+	    }
+
 		
 	
 	}

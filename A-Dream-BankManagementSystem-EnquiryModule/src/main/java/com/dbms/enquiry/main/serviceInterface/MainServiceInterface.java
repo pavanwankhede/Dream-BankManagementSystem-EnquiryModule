@@ -21,6 +21,7 @@ public boolean deleteEnquiryByID(int id);
 
 public List<EnquiryDetails> getEnquiryByStatus(EnquiryStatus status);
 
- 
+public EnquiryDetails updateSetCibilDetail(int enquiryId);
+
 
 }
