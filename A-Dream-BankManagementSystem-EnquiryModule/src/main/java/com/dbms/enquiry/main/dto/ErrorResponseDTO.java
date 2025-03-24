@@ -1,6 +1,7 @@
 package com.dbms.enquiry.main.dto;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
@@ -20,7 +21,7 @@ public class ErrorResponseDTO {
 	public ErrorResponseDTO(String message, Map<String, String> fieldErrors) {
 		this.message = message;
 		this.timestamp = LocalDateTime.now(); // Automatically set timestamp
-		this.fieldErrors = fieldErrors;
+		this.fieldErrors = fieldErrors != null ? fieldErrors : new HashMap<>();
 	}
 }
 
