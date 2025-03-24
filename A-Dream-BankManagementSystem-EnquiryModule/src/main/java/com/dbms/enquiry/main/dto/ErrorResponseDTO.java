@@ -1,8 +1,7 @@
 package com.dbms.enquiry.main.dto;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,16 +11,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class ErrorResponseDTO {
-	
-	private String message;
-	private LocalDateTime timestamp; // Fixed typo (was "timestamb")
-	private Map<String, String> fieldErrors; // Added missing field
+    
+    private String message;
+    private String date;
+    private String time;
 
-	// Constructor for validation errors
-	public ErrorResponseDTO(String message, Map<String, String> fieldErrors) {
-		this.message = message;
-		this.timestamp = LocalDateTime.now(); // Automatically set timestamp
-		this.fieldErrors = fieldErrors != null ? fieldErrors : new HashMap<>();
-	}
+    public ErrorResponseDTO(String message) {
+        this.message = message;
+        this.date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        this.time = new SimpleDateFormat("HH:mm:ss").format(new Date());
+    }
 }
-

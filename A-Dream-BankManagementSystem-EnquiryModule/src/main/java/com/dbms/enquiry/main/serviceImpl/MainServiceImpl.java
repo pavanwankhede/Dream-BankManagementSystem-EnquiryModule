@@ -10,6 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.dbms.enquiry.main.enums.EnquiryStatus;
@@ -24,6 +28,7 @@ import com.dbms.enquiry.main.serviceInterface.CibilScoreFetcher;
 import com.dbms.enquiry.main.serviceInterface.EmailDetails;
 import com.dbms.enquiry.main.serviceInterface.MainServiceInterface;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 
 @Service
@@ -183,17 +188,41 @@ public class MainServiceImpl implements MainServiceInterface {
 	        return enquiryRepository.save(existingEnquiry);
 	    }
 
+	@Override
+	public Page<EnquiryDetails> getPaginatedEnquiries(int page, int size, String sortBy) {
 		
-	
+		Pageable pageable = PageRequest.of(page, size,Sort.by(sortBy));
+        return enquiryRepository.findAll(pageable);
+
 	}
 
+	@Override
+	public EnquiryDetails updateEnquiryDetails(int enquiryId, EnquiryDetails updatedEnquiry) {
+		
+		log.info("Attempting to update Enquiry with ID: {}", enquiryId);
 
+        Optional<EnquiryDetails> existingEnquiryOpt = enquiryRepository.findById(enquiryId);
 
+        if (!existingEnquiryOpt.isPresent()) {
+            log.error("Enquiry with ID {} not found", enquiryId);
+            //throw new ResourceNotFoundException("Enquiry not found with ID: " + enquiryId);
+        }
 
+        EnquiryDetails existingEnquiry = existingEnquiryOpt.get();
 
+        existingEnquiry.setFullName(updatedEnquiry.getFullName());
+        existingEnquiry.setEmailId(updatedEnquiry.getEmailId());
+        existingEnquiry.setContactNO(updatedEnquiry.getContactNO());
+        existingEnquiry.setAge(updatedEnquiry.getAge());
+        
+        log.info("Existing Enquiry found: {}", existingEnquiry);
+EnquiryDetails savedEnquiry = enquiryRepository.save(existingEnquiry);
+        
+        log.info("Successfully updated Enquiry with ID: {} | Updated Details: {}", enquiryId, savedEnquiry);
 
+        return savedEnquiry;
+	}
 
-
-
-
-
+	
+	
+}
