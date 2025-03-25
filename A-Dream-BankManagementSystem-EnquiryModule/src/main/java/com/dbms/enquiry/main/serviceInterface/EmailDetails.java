@@ -68,69 +68,89 @@ public class EmailDetails {
 	    }
 	    
 	    public void sendEnquiryStatusUpdate(EnquiryDetails enquiry, EnquiryStatus previousStatus, EnquiryStatus newStatus) {
-	        SimpleMailMessage message = new SimpleMailMessage();
-	        message.setFrom(FROM_MAIL);
-	        message.setTo(enquiry.getEmailId());
-	        message.setSubject("Enquiry Status Update - " + enquiry.getEnquriyId());
+	    	  SimpleMailMessage message = new SimpleMailMessage();
+	    	    message.setFrom(FROM_MAIL);
+	    	    message.setTo(enquiry.getEmailId());
+	    	    message.setSubject("Enquiry Status Update - " + enquiry.getEnquriyId());
 
-	        String emailContent;
+	    	    String emailContent;
 
-	        if (newStatus == EnquiryStatus.APPROVED) {
-	            emailContent = 
-	                "Dear " + enquiry.getFullName() + ",\n\n" +
-	                "We would like to inform you that your enquiry status has been updated.\n" +
-	                "🎉 Congratulations!! 🎉 You are eligible for a loan.\n\n" +
-	               
-	                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
-	                "📌 Enquiry Status Update\n" +
-	                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
-	                "🆔 Enquiry ID: " + enquiry.getEnquriyId() + "\n" +
-	                "📞 Contact No: " + enquiry.getContactNO() + "\n" +
-	                "📋 Previous Status: " + previousStatus + "\n" +
-	                "✅ New Status: " + newStatus + "\n\n" +
-	                "📢 Next Steps: Our team will contact you shortly with further details on loan processing.\n\n" +
-	                "Best Regards,\n" +
-	                "📧 Customer Support Team\n" +
-	                "🏦 BankFinancial Services\n\n" +
-	                "✨ Thank You for Choosing Us! ✨";
-	        } else if (newStatus == EnquiryStatus.REJECTED) {
-	            emailContent = 
-	                "Dear " + enquiry.getFullName() + ",\n\n" +
-	                "We regret to inform you that your enquiry has been **rejected** after review.\n\n" +
-	                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
-	                "📌 Enquiry Status Update\n" +
-	                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
-	                "🆔 Enquiry ID: " + enquiry.getEnquriyId() + "\n" +
-	                "📞 Contact No: " + enquiry.getContactNO() + "\n" +
-	                "📋 Previous Status: " + previousStatus + "\n" +
-	                "❌ New Status: " + newStatus + "\n\n" +
-	                "📢 Possible Reasons: This could be due to low CIBIL score, incomplete documents, or other eligibility criteria.\n" +
-	                "💡 Next Steps: You may reapply after improving your eligibility or contact our support team for further details.\n\n" +
-	                "Best Regards,\n" +
-	                "📧 Customer Support Team\n" +
-	                "🏦 BankFinancial Services\n\n" +
-	                "🔄 We Appreciate Your Interest & Look Forward to Serving You Again! 🔄";
-	        } else {
-	            emailContent = 
-	                "Dear " + enquiry.getFullName() + ",\n\n" +
-	                "We would like to inform you that your enquiry status has been updated.\n\n" +
-	                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
-	                "📌 Enquiry Status Update\n" +
-	                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
-	                "🆔 Enquiry ID: " + enquiry.getEnquriyId() + "\n" +
-	                "📞 Contact No: " + enquiry.getContactNO() + "\n" +
-	                "📋 Previous Status: " + previousStatus + "\n" +
-	                "🔄 New Status: " + newStatus + "\n\n" +
-	                "📢 If you have any questions, feel free to reach out to our support team.\n\n" +
-	                "Best Regards,\n" +
-	                "📧 Customer Support Team\n" +
-	                "🏦 BankFinancial Services\n\n" +
-	                "✨ Thank You for Choosing Us! ✨";
-	        }
+	    	    if (newStatus == EnquiryStatus.APPROVED) {
+	    	        emailContent = 
+	    	            "Dear " + enquiry.getFullName() + ",\n\n" +
+	    	            "We would like to inform you that your enquiry status has been updated.\n" +
+	    	            "🎉 Congratulations!! 🎉 You are eligible for a loan.\n\n" +
+	    	            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+	    	            "📌 Enquiry Status Update\n" +
+	    	            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+	    	            "🆔 Enquiry ID: " + enquiry.getEnquriyId() + "\n" +
+	    	            "📞 Contact No: " + enquiry.getContactNO() + "\n" +
+	    	            "📋 Previous Status: " + previousStatus + "\n" +
+	    	            "✅ New Status: " + newStatus + "\n\n" +
+	    	            "📢 Next Steps: Our team will contact you shortly with further details on loan processing.\n\n" +
+	    	            "Best Regards,\n" +
+	    	            "📧 Customer Support Team\n" +
+	    	            "🏦 BankFinancial Services\n\n" +
+	    	            "✨ Thank You for Choosing Us! ✨";
+	    	    } else if (newStatus == EnquiryStatus.REJECTED) {
+	    	        emailContent = 
+	    	            "Dear " + enquiry.getFullName() + ",\n\n" +
+	    	            "We regret to inform you that your enquiry has been **rejected** after review.\n\n" +
+	    	            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+	    	            "📌 Enquiry Status Update\n" +
+	    	            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+	    	            "🆔 Enquiry ID: " + enquiry.getEnquriyId() + "\n" +
+	    	            "📞 Contact No: " + enquiry.getContactNO() + "\n" +
+	    	            "📋 Previous Status: " + previousStatus + "\n" +
+	    	            "❌ New Status: " + newStatus + "\n\n" +
+	    	            "📢 Possible Reasons: This could be due to low CIBIL score, incomplete documents, or other eligibility criteria.\n" +
+	    	            "💡 Next Steps: You may reapply after improving your eligibility or contact our support team for further details.\n\n" +
+	    	            "Best Regards,\n" +
+	    	            "📧 Customer Support Team\n" +
+	    	            "🏦 BankFinancial Services\n\n" +
+	    	            "🔄 We Appreciate Your Interest & Look Forward to Serving You Again! 🔄";
+	    	    } else if (newStatus == EnquiryStatus.SPAM) {
+	    	        emailContent = 
+	    	            "Dear " + enquiry.getFullName() + ",\n\n" +
+	    	            "We would like to inform you that your enquiry has been marked as **SPAM** in our system.\n\n" +
+	    	            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+	    	            "📌 Enquiry Status Update\n" +
+	    	            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+	    	            "🆔 Enquiry ID: " + enquiry.getEnquriyId() + "\n" +
+	    	            "📞 Contact No: " + enquiry.getContactNO() + "\n" +
+	    	            "📋 Previous Status: " + previousStatus + "\n" +
+	    	            "🚨 New Status: " + newStatus + "\n\n" +
+	    	            "📢 Why was this marked as SPAM?\n" +
+	    	            "- Your enquiry may contain **incomplete, duplicate, or misleading information**.\n" +
+	    	            "- It might have triggered our **fraud detection system**.\n\n" +
+	    	            "⚠️ **What You Can Do?**\n" +
+	    	            "- If you believe this is an error, please **contact our support team immediately**.\n" +
+	    	            "- Submit a new enquiry with **correct and verifiable details**.\n\n" +
+	    	            "Best Regards,\n" +
+	    	            "📧 Customer Support Team\n" +
+	    	            "🏦 BankFinancial Services\n\n" +
+	    	            "🔹 Ensuring Secure & Reliable Financial Services 🔹";
+	    	    } else {
+	    	        emailContent = 
+	    	            "Dear " + enquiry.getFullName() + ",\n\n" +
+	    	            "We would like to inform you that your enquiry status has been updated.\n\n" +
+	    	            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+	    	            "📌 Enquiry Status Update\n" +
+	    	            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+	    	            "🆔 Enquiry ID: " + enquiry.getEnquriyId() + "\n" +
+	    	            "📞 Contact No: " + enquiry.getContactNO() + "\n" +
+	    	            "📋 Previous Status: " + previousStatus + "\n" +
+	    	            "🔄 New Status: " + newStatus + "\n\n" +
+	    	            "📢 If you have any questions, feel free to reach out to our support team.\n\n" +
+	    	            "Best Regards,\n" +
+	    	            "📧 Customer Support Team\n" +
+	    	            "🏦 BankFinancial Services\n\n" +
+	    	            "✨ Thank You for Choosing Us! ✨";
+	    	    }
 
-	        message.setText(emailContent);
-	        sender.send(message);
-	        log.info("Enquiry status update email sent to {}", enquiry.getEmailId());
+	    	    message.setText(emailContent);
+	    	    sender.send(message);
+	    	    log.info("Enquiry status update email sent to {}", enquiry.getEmailId());
 	    }
 }
 

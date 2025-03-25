@@ -3,6 +3,13 @@ package com.dbms.enquiry.main.model;
 import com.dbms.enquiry.main.enums.ScoreCategories;
 
 public class CibilScoreUtil {
+	
+
+	/*
+	 * public static long generateRandomCibilScore() { Random random = new Random();
+	 * return 300 + random.nextInt(601); // Random score between 300 and 900 }
+	 */
+
      
 	public static ScoreCategories getScoreCategory(long score) {
 		if (score >= 900) return ScoreCategories.EXCELLENT;

@@ -10,18 +10,28 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.dbms.enquiry.main.enums.EnquiryStatus;
 import com.dbms.enquiry.main.exceptions.EnquiryNotFoundException;
+import com.dbms.enquiry.main.exceptions.NoEnquiryFoundForStatusException;
 import com.dbms.enquiry.main.model.CibilDetails;
 import com.dbms.enquiry.main.model.CibilScoreUtil;
 import com.dbms.enquiry.main.model.EnquiryDetails;
 import com.dbms.enquiry.main.repository.CibilRepository;
 import com.dbms.enquiry.main.repository.EnquiryRepository;
+import com.dbms.enquiry.main.serviceInterface.CibilScoreFetcher;
 import com.dbms.enquiry.main.serviceInterface.EmailDetails;
 import com.dbms.enquiry.main.serviceInterface.MainServiceInterface;
 
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @Service
@@ -37,6 +47,9 @@ public class MainServiceImpl implements MainServiceInterface {
 	
 	@Autowired
 	private CibilRepository cibilRepository;
+	
+	@Autowired
+	CibilScoreFetcher cibilScoreFetcher;
 
 	@Override
 	public EnquiryDetails saveEnquiriesData(@Valid EnquiryDetails enquiries) {
@@ -133,19 +146,91 @@ public class MainServiceImpl implements MainServiceInterface {
 		
 		return false;
 	}
-
-	 
-		
 	
+
+	@Override
+	public List<EnquiryDetails> getEnquiryByStatus(EnquiryStatus status) {
+		List<EnquiryDetails> enquires= enquiryRepository.findByEnquriyStatus(status);
+		 if (enquires.isEmpty() ) {
+	            throw new NoEnquiryFoundForStatusException("No enquiries found with status: "+status);
+	        }
+		return enquires;
+
 	}
 
+	 
+	@Override
+	public EnquiryDetails updateSetCibilDetail(int enquiryId) {
+		
+	    // Fetch the existing enquiry
+        EnquiryDetails existingEnquiry = enquiryRepository.findById(enquiryId)
+            .orElseThrow(() -> new RuntimeException("Enquiry with ID " + enquiryId + " not found."));
 
+        // Generate and update CIBIL Score if not already present
+        if (existingEnquiry.getCibilDetails() == null) {
+            CibilDetails cibilDetails = new CibilDetails();
 
+            // Fetch a random CIBIL score
+            Long generatedScore = cibilScoreFetcher.fetchCibilScore(existingEnquiry.getPanCardNo());
 
+            // Set CIBIL details
+            cibilDetails.setCibilScore(generatedScore);
+            cibilDetails.setScoreCategories(CibilScoreUtil.getScoreCategory(generatedScore));
+            cibilDetails.setRemarks(CibilScoreUtil.getRemarks(generatedScore));
+            cibilDetails.setCibilGeneratedDateTime(LocalDateTime.now());
 
+            // Attach to EnquiryDetails
+            existingEnquiry.setCibilDetails(cibilDetails);
+        }
 
+        // Save and return updated enquiry
+        return enquiryRepository.save(existingEnquiry);
+    }
 
+	@Override
+	public Page<EnquiryDetails> getPaginatedEnquiries(int page, int size, String sortBy) {
+		
+		Pageable pageable = PageRequest.of(page, size,Sort.by(sortBy));
+        return enquiryRepository.findAll(pageable);
 
+	}
 
+	@Override
+	public EnquiryDetails updateEnquiryDetails(int enquiryId, EnquiryDetails updatedEnquiry) {
+		
+		log.info("Attempting to update Enquiry with ID: {}", enquiryId);
 
+        Optional<EnquiryDetails> existingEnquiryOpt = enquiryRepository.findById(enquiryId);
+
+        if (!existingEnquiryOpt.isPresent()) {
+            log.error("Enquiry with ID {} not found", enquiryId);
+            
+            //throw new ResourceNotFoundException("Enquiry not found with ID: " + enquiryId);
+        }
+
+        EnquiryDetails existingEnquiry = existingEnquiryOpt.get();
+
+        existingEnquiry.setFullName(updatedEnquiry.getFullName());
+        existingEnquiry.setEmailId(updatedEnquiry.getEmailId());
+        existingEnquiry.setContactNO(updatedEnquiry.getContactNO());
+        existingEnquiry.setAge(updatedEnquiry.getAge());
+        
+        log.info("Existing Enquiry found: {}", existingEnquiry);
+          EnquiryDetails savedEnquiry = enquiryRepository.save(existingEnquiry);
+        
+        log.info("Successfully updated Enquiry with ID: {} | Updated Details: {}", enquiryId, savedEnquiry);
+
+        return savedEnquiry;
+	}
+
+	 @Transactional
+	    @Override
+	    public int deleteEnquiryByIdAndStatus(int enquiryId, EnquiryStatus enquriyStatus) {
+	        return enquiryRepository.deleteByIdAndStatus(enquiryId,enquriyStatus);
+	    }
+	}
+
+	
+
+	
 
