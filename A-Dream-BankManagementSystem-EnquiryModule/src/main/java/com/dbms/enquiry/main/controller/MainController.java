@@ -72,26 +72,6 @@ public class MainController {
 	}
 	
 	  
-	@DeleteMapping("/deleteById/{enquriyId}")
-	public ResponseEntity<String> deleteEnquiryByID(@PathVariable("enquriyId") int id){
-		
-		  boolean delete= serviceInterface.deleteEnquiryByID(id);
-		  if(delete)
-		  {
-			  return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		  }else
-		  {
-				return new ResponseEntity<String>("Enquiry Not Found",HttpStatus.NOT_FOUND);
-		  }
-			  
-	
+	 
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-}
