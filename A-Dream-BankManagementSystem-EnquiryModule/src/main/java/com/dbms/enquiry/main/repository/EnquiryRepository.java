@@ -17,4 +17,6 @@ public interface EnquiryRepository extends JpaRepository<EnquiryDetails, Integer
 
 	Page<EnquiryDetails> findAll(Pageable pageable);
 
+	int deleteByEnquriyStatus(String string);
+
 }

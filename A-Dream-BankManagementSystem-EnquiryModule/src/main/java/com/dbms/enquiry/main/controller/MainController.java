@@ -69,6 +69,8 @@ public class MainController {
 	
 	@PatchMapping("/updateEnquiryStatus/{enquriyId}/{enquriyStatus}")
 	public ResponseEntity<EnquiryDetails> updateEnquiry(@PathVariable("enquriyId")int id,@PathVariable("enquriyStatus")EnquiryStatus status){
+		
+		log.info("Received Request to update Enquiry Status");
 		EnquiryDetails enquiryDetails=serviceInterface.changeEnquiryStatus(id,status);
 		return new ResponseEntity<EnquiryDetails>(enquiryDetails,HttpStatus.OK);
 	}
@@ -93,7 +95,7 @@ public class MainController {
 	@GetMapping("/getEnquiryByEnquiryStatus/{enquriyStatus}")
 	public ResponseEntity<List<EnquiryDetails>>  getByEnquiryStatus(@PathVariable("enquriyStatus")EnquiryStatus status)
 	{
-		log.info("Recieved request to fine Enquiry by Enquiry status:{}",status);
+		log.info("Recieved request to find Enquiry by Enquiry status:{}",status);
 		List<EnquiryDetails> enquiryBystatus=serviceInterface.getEnquiryByStatus(status);
 		log.info("Enquiry by EnquiryStatus:");
 		return new ResponseEntity<List<EnquiryDetails>>(enquiryBystatus,HttpStatus.OK);
@@ -129,5 +131,5 @@ public class MainController {
 	    
 	    return new ResponseEntity<>(updatedDetails, HttpStatus.OK);
 	}
-	
+	 
 }

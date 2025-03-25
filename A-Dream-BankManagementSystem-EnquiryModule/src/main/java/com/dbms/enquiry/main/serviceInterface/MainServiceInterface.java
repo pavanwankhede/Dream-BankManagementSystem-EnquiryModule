@@ -32,4 +32,6 @@ public EnquiryDetails updateEnquiryDetails(int enquiryId, EnquiryDetails updated
 
 
 
+
+
 }
