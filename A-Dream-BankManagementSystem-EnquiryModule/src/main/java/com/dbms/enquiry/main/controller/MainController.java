@@ -101,11 +101,14 @@ public class MainController {
 	}
 	
 	
-	@PatchMapping("/updateEnquiry/{enquiryId}")
+	@PatchMapping("/updateEnquiryWithCibil/{enquiryId}")
 	public ResponseEntity<EnquiryDetails> updateEnquiry(@PathVariable("enquiryId") int enquiryId) {
 	    EnquiryDetails updatedEnquiry = serviceInterface.updateSetCibilDetail(enquiryId);
 	    return new ResponseEntity<>(updatedEnquiry, HttpStatus.OK);
 	}
+	
+	//To implement paging and sorting
+	
 	@GetMapping("/enquires")
     public ResponseEntity<Page<EnquiryDetails>> getPaginatedEnquiries(
             @RequestParam(defaultValue = "0") int page,
@@ -116,7 +119,7 @@ public class MainController {
         return ResponseEntity.ok(paginatedEnquiries);
     }
 
-	@PutMapping("/updateEnquiryDetail/{enquiryId}")
+	@PutMapping("/updateOnlyEnquiryDetail/{enquiryId}")
 	public ResponseEntity<EnquiryDetails> updateEnquiry(
 	        @PathVariable("enquiryId") int enquiryId, 
 	        @RequestBody EnquiryDetails updatedEnquiry) {
