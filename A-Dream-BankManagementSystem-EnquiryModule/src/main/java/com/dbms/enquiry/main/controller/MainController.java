@@ -103,11 +103,14 @@ public class MainController {
 	}
 	
 	
-	@PatchMapping("/updateEnquiry/{enquiryId}")
+	@PatchMapping("/updateEnquiryWithCibil/{enquiryId}")
 	public ResponseEntity<EnquiryDetails> updateEnquiry(@PathVariable("enquiryId") int enquiryId) {
 	    EnquiryDetails updatedEnquiry = serviceInterface.updateSetCibilDetail(enquiryId);
 	    return new ResponseEntity<>(updatedEnquiry, HttpStatus.OK);
 	}
+	
+	//To implement paging and sorting
+	
 	@GetMapping("/enquires")
     public ResponseEntity<Page<EnquiryDetails>> getPaginatedEnquiries(
             @RequestParam(defaultValue = "0") int page,
@@ -118,7 +121,7 @@ public class MainController {
         return ResponseEntity.ok(paginatedEnquiries);
     }
 
-	@PutMapping("/updateEnquiryDetail/{enquiryId}")
+	@PutMapping("/updateOnlyEnquiryDetail/{enquiryId}")
 	public ResponseEntity<EnquiryDetails> updateEnquiry(
 	        @PathVariable("enquiryId") int enquiryId, 
 	        @RequestBody EnquiryDetails updatedEnquiry) {
@@ -131,5 +134,36 @@ public class MainController {
 	    
 	    return new ResponseEntity<>(updatedDetails, HttpStatus.OK);
 	}
-	 
-}
+
+
+
+	
+	@DeleteMapping("/deleteSpamEnquiries/{enquiryId}/{enquriyStatus}")
+	public ResponseEntity<String> deleteSpamEnquiries(
+	        @PathVariable int enquiryId,
+	        @PathVariable EnquiryStatus enquriyStatus) {
+
+	    log.info("Request received to delete enquiry with ID: {} and status: {}", enquiryId, enquriyStatus);
+
+	    // Ensure only spam enquiries are deleted
+	    if (enquriyStatus != EnquiryStatus.SPAM) {
+	        log.warn("Invalid status for deletion: {}. Only SPAM enquiries can be deleted.", enquriyStatus);
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                .body("Only SPAM enquiries can be deleted.");
+	    }
+
+	    int deletedCount = serviceInterface.deleteEnquiryByIdAndStatus(enquiryId, enquriyStatus);
+
+	    if (deletedCount > 0) {
+	        log.info("Enquiry with ID {} and status {} deleted successfully", enquiryId, enquriyStatus);
+	        return ResponseEntity.ok("Deleted spam enquiry with ID " + enquiryId);
+	    }
+
+	    log.warn("No spam enquiry found with the given ID: {}", enquiryId);
+	    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	            .body("No spam enquiry found with the given ID");
+	}
+	}
+	
+
+

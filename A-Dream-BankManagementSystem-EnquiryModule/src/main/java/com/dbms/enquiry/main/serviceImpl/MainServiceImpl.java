@@ -14,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.dbms.enquiry.main.enums.EnquiryStatus;
@@ -29,6 +31,7 @@ import com.dbms.enquiry.main.serviceInterface.EmailDetails;
 import com.dbms.enquiry.main.serviceInterface.MainServiceInterface;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @Service
@@ -143,6 +146,7 @@ public class MainServiceImpl implements MainServiceInterface {
 		
 		return false;
 	}
+	
 
 	@Override
 	public List<EnquiryDetails> getEnquiryByStatus(EnquiryStatus status) {
@@ -158,35 +162,30 @@ public class MainServiceImpl implements MainServiceInterface {
 	@Override
 	public EnquiryDetails updateSetCibilDetail(int enquiryId) {
 		
-		    // Fetch the existing enquiry
-	        EnquiryDetails existingEnquiry = enquiryRepository.findById(enquiryId)
-	            .orElseThrow(() -> new RuntimeException("Enquiry with ID " + enquiryId + " not found."));
+	    // Fetch the existing enquiry
+        EnquiryDetails existingEnquiry = enquiryRepository.findById(enquiryId)
+            .orElseThrow(() -> new RuntimeException("Enquiry with ID " + enquiryId + " not found."));
 
-	        // Generate and update CIBIL Score if not already present
-	        if (existingEnquiry.getCibilDetails() == null) {
-	            CibilDetails cibilDetails = new CibilDetails();
+        // Generate and update CIBIL Score if not already present
+        if (existingEnquiry.getCibilDetails() == null) {
+            CibilDetails cibilDetails = new CibilDetails();
 
-	            // Fetch CIBIL score
-	            Long generatedScore = cibilScoreFetcher.fetchCibilScore(existingEnquiry.getPanCardNo());
+            // Fetch a random CIBIL score
+            Long generatedScore = cibilScoreFetcher.fetchCibilScore(existingEnquiry.getPanCardNo());
 
-	            // If fetched score is invalid, generate a random one
-	            if (generatedScore == null || generatedScore == 0) {  
-	                generatedScore = CibilScoreUtil.generateRandomCibilScore();
-	            }
+            // Set CIBIL details
+            cibilDetails.setCibilScore(generatedScore);
+            cibilDetails.setScoreCategories(CibilScoreUtil.getScoreCategory(generatedScore));
+            cibilDetails.setRemarks(CibilScoreUtil.getRemarks(generatedScore));
+            cibilDetails.setCibilGeneratedDateTime(LocalDateTime.now());
 
-	            // Set generated values
-	            cibilDetails.setCibilScore(generatedScore);
-	            cibilDetails.setScoreCategories(CibilScoreUtil.getScoreCategory(generatedScore));
-	            cibilDetails.setRemarks(CibilScoreUtil.getRemarks(generatedScore));
-	            cibilDetails.setCibilGeneratedDateTime(LocalDateTime.now());
+            // Attach to EnquiryDetails
+            existingEnquiry.setCibilDetails(cibilDetails);
+        }
 
-	            // Set CIBIL details in enquiry
-	            existingEnquiry.setCibilDetails(cibilDetails);
-	        }
-
-	        // Save updated enquiry
-	        return enquiryRepository.save(existingEnquiry);
-	    }
+        // Save and return updated enquiry
+        return enquiryRepository.save(existingEnquiry);
+    }
 
 	@Override
 	public Page<EnquiryDetails> getPaginatedEnquiries(int page, int size, String sortBy) {
@@ -205,6 +204,7 @@ public class MainServiceImpl implements MainServiceInterface {
 
         if (!existingEnquiryOpt.isPresent()) {
             log.error("Enquiry with ID {} not found", enquiryId);
+            
             //throw new ResourceNotFoundException("Enquiry not found with ID: " + enquiryId);
         }
 
@@ -216,15 +216,21 @@ public class MainServiceImpl implements MainServiceInterface {
         existingEnquiry.setAge(updatedEnquiry.getAge());
         
         log.info("Existing Enquiry found: {}", existingEnquiry);
-EnquiryDetails savedEnquiry = enquiryRepository.save(existingEnquiry);
+          EnquiryDetails savedEnquiry = enquiryRepository.save(existingEnquiry);
         
         log.info("Successfully updated Enquiry with ID: {} | Updated Details: {}", enquiryId, savedEnquiry);
 
         return savedEnquiry;
 	}
 
+	 @Transactional
+	    @Override
+	    public int deleteEnquiryByIdAndStatus(int enquiryId, EnquiryStatus enquriyStatus) {
+	        return enquiryRepository.deleteByIdAndStatus(enquiryId,enquriyStatus);
+	    }
+	}
+
 	
 
 	
-	
-}
+
