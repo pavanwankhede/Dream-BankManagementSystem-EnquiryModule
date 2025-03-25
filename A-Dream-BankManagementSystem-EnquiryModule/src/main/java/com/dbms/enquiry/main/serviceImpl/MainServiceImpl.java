@@ -225,8 +225,8 @@ public class MainServiceImpl implements MainServiceInterface {
 
 	 @Transactional
 	    @Override
-	    public int deleteEnquiryByIdAndStatus(int enquiryId, EnquiryStatus status) {
-	        return enquiryRepository.deleteByIdAndStatus(enquiryId, status);
+	    public int deleteEnquiryByIdAndStatus(int enquiryId, EnquiryStatus enquriyStatus) {
+	        return enquiryRepository.deleteByIdAndStatus(enquiryId,enquriyStatus);
 	    }
 	}
 
