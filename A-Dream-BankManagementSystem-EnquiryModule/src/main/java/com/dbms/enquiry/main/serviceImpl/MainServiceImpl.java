@@ -14,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.dbms.enquiry.main.enums.EnquiryStatus;
@@ -29,6 +31,7 @@ import com.dbms.enquiry.main.serviceInterface.EmailDetails;
 import com.dbms.enquiry.main.serviceInterface.MainServiceInterface;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @Service
@@ -220,6 +223,12 @@ public class MainServiceImpl implements MainServiceInterface {
         return savedEnquiry;
 	}
 
+	 @Transactional
+	    @Override
+	    public int deleteEnquiryByIdAndStatus(int enquiryId, EnquiryStatus status) {
+	        return enquiryRepository.deleteByIdAndStatus(enquiryId, status);
+	    }
+	}
+
 	
 	
-}

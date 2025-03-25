@@ -7,6 +7,7 @@ import com.dbms.enquiry.main.enums.EnquiryStatus;
 import com.dbms.enquiry.main.enums.EnquriyType;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -64,6 +65,7 @@ public class EnquiryDetails {
 	private EnquriyType enquriyType;
 	
 	@Enumerated(EnumType.STRING)
+	@Column(name = "enquriy_status", length = 20, nullable = false)
 	private EnquiryStatus enquriyStatus;
 	
 	  @Temporal(TemporalType.DATE)

@@ -29,6 +29,10 @@ public Page<EnquiryDetails> getPaginatedEnquiries(int page, int size, String sor
 
 public EnquiryDetails updateEnquiryDetails(int enquiryId, EnquiryDetails updatedEnquiry);
 
+public int deleteEnquiryByIdAndStatus(int enquiryId, EnquiryStatus status);
+
+
+
 
 
 

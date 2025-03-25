@@ -133,4 +133,31 @@ public class MainController {
 	    return new ResponseEntity<>(updatedDetails, HttpStatus.OK);
 	}
 	
-}
+	@DeleteMapping("/deleteSpamEnquiries/{enquiryId}/{status}")
+	public ResponseEntity<String> deleteSpamEnquiries(
+	        @PathVariable int enquiryId,
+	        @PathVariable EnquiryStatus status) {
+
+	    log.info("Request received to delete enquiry with ID: {} and status: {}", enquiryId, status);
+
+	    // Ensure only spam enquiries are deleted
+	    if (status != EnquiryStatus.SPAM) {
+	        log.warn("Invalid status for deletion: {}. Only SPAM enquiries can be deleted.", status);
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                .body("Only SPAM enquiries can be deleted.");
+	    }
+
+	    int deletedCount = serviceInterface.deleteEnquiryByIdAndStatus(enquiryId, status);
+
+	    if (deletedCount > 0) {
+	        log.info("Enquiry with ID {} and status {} deleted successfully", enquiryId, status);
+	        return ResponseEntity.ok("Deleted spam enquiry with ID " + enquiryId);
+	    }
+
+	    log.warn("No spam enquiry found with the given ID: {}", enquiryId);
+	    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	            .body("No spam enquiry found with the given ID");
+	}
+	}
+	
+

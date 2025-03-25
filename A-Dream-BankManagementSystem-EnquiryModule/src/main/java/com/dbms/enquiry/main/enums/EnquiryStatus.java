@@ -4,6 +4,7 @@ public enum EnquiryStatus {
 	
 	REJECTED,
 	APPROVED,
-	IN_PROGRESS
+	IN_PROGRESS,
+	SPAM
 	
 }
