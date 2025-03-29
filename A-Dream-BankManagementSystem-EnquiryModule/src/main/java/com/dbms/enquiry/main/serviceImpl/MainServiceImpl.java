@@ -223,11 +223,20 @@ public class MainServiceImpl implements MainServiceInterface {
         return savedEnquiry;
 	}
 
-	 @Transactional
-	    @Override
-	    public int deleteEnquiryByIdAndStatus(int enquiryId, EnquiryStatus enquriyStatus) {
-	        return enquiryRepository.deleteByIdAndStatus(enquiryId,enquriyStatus);
+	@Override
+	public boolean deleteEnquiryByIdAndStatus(int enquiryId, EnquiryStatus spam) {
+		
+		 Optional<EnquiryDetails> enquiry = enquiryRepository.findById(enquiryId);
+
+	        if (enquiry.isPresent() && enquiry.get().getEnquriyStatus() == spam) {
+	            enquiryRepository.deleteById(enquiryId);
+	            return true;
+	        }
+
+	        return false;
 	    }
+
+	
 	}
 
 	

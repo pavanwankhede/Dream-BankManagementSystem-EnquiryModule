@@ -19,8 +19,11 @@ public interface EnquiryRepository extends JpaRepository<EnquiryDetails, Integer
 	List<EnquiryDetails> findByEnquriyStatus(EnquiryStatus status);
 
 	Page<EnquiryDetails> findAll(Pageable pageable);
+	
 	@Modifying
 	@Query("DELETE FROM EnquiryDetails e WHERE e.enquriyId = :enquiryId AND e.enquriyStatus = :status")
 	int deleteByIdAndStatus(@Param("enquiryId") int enquiryId, @Param("status") EnquiryStatus status);
+
+
 
 }

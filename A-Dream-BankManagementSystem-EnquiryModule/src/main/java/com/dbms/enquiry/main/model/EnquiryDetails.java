@@ -74,7 +74,7 @@ public class EnquiryDetails {
 		    @Temporal(TemporalType.TIME)
 			private Time enquiryTime;
 		    
-		    @OneToOne(cascade = CascadeType.MERGE)
+		    @OneToOne(cascade = CascadeType.MERGE,orphanRemoval = true)
 		    private CibilDetails cibilDetails;
 	
 }

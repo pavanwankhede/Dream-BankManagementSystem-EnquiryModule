@@ -133,31 +133,18 @@ public class MainController {
 	    return new ResponseEntity<>(updatedDetails, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/deleteSpamEnquiries/{enquiryId}/{enquriyStatus}")
-	public ResponseEntity<String> deleteSpamEnquiries(
-	        @PathVariable int enquiryId,
-	        @PathVariable EnquiryStatus enquriyStatus) {
+	  @DeleteMapping("/deleteSpamEnquiries/{enquiryId}")
+	    public ResponseEntity<String> deleteSpamEnquiry(@PathVariable("enquiryId") int enquiryId) {
+	        log.info("Request received to delete enquiry with ID: {} and status: SPAM", enquiryId);
 
-	    log.info("Request received to delete enquiry with ID: {} and status: {}", enquiryId, enquriyStatus);
+	        boolean deleted =  serviceInterface.deleteEnquiryByIdAndStatus(enquiryId, EnquiryStatus.SPAM);
 
-	    // Ensure only spam enquiries are deleted
-	    if (enquriyStatus != EnquiryStatus.SPAM) {
-	        log.warn("Invalid status for deletion: {}. Only SPAM enquiries can be deleted.", enquriyStatus);
-	        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-	                .body("Only SPAM enquiries can be deleted.");
+	        if (deleted) {
+	            return ResponseEntity.ok("Deleted enquiry with ID: " + enquiryId + " and status: SPAM.");
+	        } else {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	                    .body("No enquiry with SPAM status found for the given ID.");
+	        }
 	    }
-
-	    int deletedCount = serviceInterface.deleteEnquiryByIdAndStatus(enquiryId, enquriyStatus);
-
-	    if (deletedCount > 0) {
-	        log.info("Enquiry with ID {} and status {} deleted successfully", enquiryId, enquriyStatus);
-	        return ResponseEntity.ok("Deleted spam enquiry with ID " + enquiryId);
-	    }
-
-	    log.warn("No spam enquiry found with the given ID: {}", enquiryId);
-	    return ResponseEntity.status(HttpStatus.NOT_FOUND)
-	            .body("No spam enquiry found with the given ID");
-	}
-	}
 	
-
+}
