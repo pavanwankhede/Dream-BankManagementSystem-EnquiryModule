@@ -75,22 +75,12 @@ public class MainController {
 		return new ResponseEntity<EnquiryDetails>(enquiryDetails,HttpStatus.OK);
 	}
 	
-	  
-	@DeleteMapping("/deleteById/{enquriyId}")
-	public ResponseEntity<String> deleteEnquiryByID(@PathVariable("enquriyId") int id){
-		
-		  boolean delete= serviceInterface.deleteEnquiryByID(id);
-		  if(delete)
-		  {
-			  return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		  }else
-		  {
-				return new ResponseEntity<String>("Enquiry Not Found",HttpStatus.NOT_FOUND);
-		  }
-			  
+ 
+	 
 	
-	}
 	
+ 
+ 
 	
 	@GetMapping("/getEnquiryByEnquiryStatus/{enquriyStatus}")
 	public ResponseEntity<List<EnquiryDetails>>  getByEnquiryStatus(@PathVariable("enquriyStatus")EnquiryStatus status)
@@ -167,3 +157,4 @@ public class MainController {
 	
 
 
+ 
