@@ -67,6 +67,7 @@ public class EmailDetails {
 	        log.info("Enquiry confirmation email sent to {}", enquiry.getEmailId());
 	    }
 	    
+	    
 	    public void sendEnquiryStatusUpdate(EnquiryDetails enquiry, EnquiryStatus previousStatus, EnquiryStatus newStatus) {
 	    	  SimpleMailMessage message = new SimpleMailMessage();
 	    	    message.setFrom(FROM_MAIL);
