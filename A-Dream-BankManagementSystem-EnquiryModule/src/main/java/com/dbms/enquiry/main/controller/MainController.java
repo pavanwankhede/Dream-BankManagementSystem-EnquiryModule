@@ -51,6 +51,8 @@ public class MainController {
          EnquiryDetails enquiry = serviceInterface.saveEnquiriesData(enquiries);
 		return new ResponseEntity<>(enquiry, HttpStatus.CREATED);
 	}
+	
+	
 	@GetMapping("/getAll_Enquiry")
 	public ResponseEntity<List<EnquiryDetails>>  getAllEnquiry()
 	{

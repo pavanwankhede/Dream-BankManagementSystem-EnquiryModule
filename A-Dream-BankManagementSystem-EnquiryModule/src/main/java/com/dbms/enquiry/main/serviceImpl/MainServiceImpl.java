@@ -86,12 +86,14 @@ public class MainServiceImpl implements MainServiceInterface {
 	        
 	        return savedEnquiry;
 	    }
+	
 
 	@Override
 	public List<EnquiryDetails> getAllEnquiry() {
 		
 		return enquiryRepository.findAll();
 	}
+	
 
 	@Override
 	public EnquiryDetails getEnquiryByID(int id) {
@@ -106,6 +108,7 @@ public class MainServiceImpl implements MainServiceInterface {
 		
 		return enquiry.get() ;
 	}
+	
 
 	@Override
 	public EnquiryDetails changeEnquiryStatus(int id, EnquiryStatus newStatus) {
@@ -135,6 +138,7 @@ public class MainServiceImpl implements MainServiceInterface {
 	    }
 	}
 
+	
 	@Override
 	public boolean deleteEnquiryByID(int id) {
 		 
@@ -186,6 +190,7 @@ public class MainServiceImpl implements MainServiceInterface {
         // Save and return updated enquiry
         return enquiryRepository.save(existingEnquiry);
     }
+	
 
 	@Override
 	public Page<EnquiryDetails> getPaginatedEnquiries(int page, int size, String sortBy) {
@@ -222,6 +227,7 @@ public class MainServiceImpl implements MainServiceInterface {
 
         return savedEnquiry;
 	}
+	
 
 	@Override
 	public boolean deleteEnquiryByIdAndStatus(int enquiryId, EnquiryStatus spam) {
