@@ -6,5 +6,6 @@ public enum EnquiryStatus {
 	APPROVED,
 	IN_PROGRESS,
 	SPAM
+
 	
 }

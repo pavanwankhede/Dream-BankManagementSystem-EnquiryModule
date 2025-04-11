@@ -38,4 +38,6 @@ public boolean deleteEnquiryByIdAndStatus(int enquiryId, EnquiryStatus spam);
 
 
 
+
+
 }

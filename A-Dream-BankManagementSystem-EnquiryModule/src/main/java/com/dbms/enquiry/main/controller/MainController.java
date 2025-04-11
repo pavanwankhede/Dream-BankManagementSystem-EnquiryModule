@@ -71,31 +71,17 @@ public class MainController {
 	
 	@PatchMapping("/updateEnquiryStatus/{enquriyId}/{enquriyStatus}")
 	public ResponseEntity<EnquiryDetails> updateEnquiry(@PathVariable("enquriyId")int id,@PathVariable("enquriyStatus")EnquiryStatus status){
+		
+		log.info("Received Request to update Enquiry Status");
 		EnquiryDetails enquiryDetails=serviceInterface.changeEnquiryStatus(id,status);
 		return new ResponseEntity<EnquiryDetails>(enquiryDetails,HttpStatus.OK);
-	}
-	
-	  
-	@DeleteMapping("/deleteById/{enquriyId}")
-	public ResponseEntity<String> deleteEnquiryByID(@PathVariable("enquriyId") int id){
-		
-		  boolean delete= serviceInterface.deleteEnquiryByID(id);
-		  if(delete)
-		  {
-			  return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		  }else
-		  {
-				return new ResponseEntity<String>("Enquiry Not Found",HttpStatus.NOT_FOUND);
-		  }
-			  
-	
 	}
 	
 	
 	@GetMapping("/getEnquiryByEnquiryStatus/{enquriyStatus}")
 	public ResponseEntity<List<EnquiryDetails>>  getByEnquiryStatus(@PathVariable("enquriyStatus")EnquiryStatus status)
 	{
-		log.info("Recieved request to fine Enquiry by Enquiry status:{}",status);
+		log.info("Recieved request to find Enquiry by Enquiry status:{}",status);
 		List<EnquiryDetails> enquiryBystatus=serviceInterface.getEnquiryByStatus(status);
 		log.info("Enquiry by EnquiryStatus:");
 		return new ResponseEntity<List<EnquiryDetails>>(enquiryBystatus,HttpStatus.OK);
@@ -134,7 +120,8 @@ public class MainController {
 	    
 	    return new ResponseEntity<>(updatedDetails, HttpStatus.OK);
 	}
-	
+
+
 	  @DeleteMapping("/deleteSpamEnquiries/{enquiryId}")
 	    public ResponseEntity<String> deleteSpamEnquiry(@PathVariable("enquiryId") int enquiryId) {
 	        log.info("Request received to delete enquiry with ID: {} and status: SPAM", enquiryId);
@@ -147,6 +134,9 @@ public class MainController {
 	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
 	                    .body("No enquiry with SPAM status found for the given ID.");
 	        }
-	    }
+	  }
+	  
+	  }
+
 	
-}
+

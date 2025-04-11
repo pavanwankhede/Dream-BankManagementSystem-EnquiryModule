@@ -25,5 +25,4 @@ public interface EnquiryRepository extends JpaRepository<EnquiryDetails, Integer
 	int deleteByIdAndStatus(@Param("enquiryId") int enquiryId, @Param("status") EnquiryStatus status);
 
 
-
 }
