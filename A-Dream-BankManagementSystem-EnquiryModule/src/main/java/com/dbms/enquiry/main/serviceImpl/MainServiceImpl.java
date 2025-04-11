@@ -9,13 +9,10 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.dbms.enquiry.main.cibilScoreFetch.CibilScoreFetcher;
@@ -29,9 +26,6 @@ import com.dbms.enquiry.main.model.EnquiryDetails;
 import com.dbms.enquiry.main.repository.CibilRepository;
 import com.dbms.enquiry.main.repository.EnquiryRepository;
 import com.dbms.enquiry.main.serviceInterface.MainServiceInterface;
-
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @Service
