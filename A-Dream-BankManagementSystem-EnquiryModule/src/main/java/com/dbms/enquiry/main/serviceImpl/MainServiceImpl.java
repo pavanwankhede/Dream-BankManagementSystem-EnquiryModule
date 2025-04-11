@@ -18,16 +18,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.dbms.enquiry.main.cibilScoreFetch.CibilScoreFetcher;
 import com.dbms.enquiry.main.enums.EnquiryStatus;
 import com.dbms.enquiry.main.exceptions.EnquiryNotFoundException;
 import com.dbms.enquiry.main.exceptions.NoEnquiryFoundForStatusException;
+import com.dbms.enquiry.main.mail.EmailDetails;
 import com.dbms.enquiry.main.model.CibilDetails;
 import com.dbms.enquiry.main.model.CibilScoreUtil;
 import com.dbms.enquiry.main.model.EnquiryDetails;
 import com.dbms.enquiry.main.repository.CibilRepository;
 import com.dbms.enquiry.main.repository.EnquiryRepository;
-import com.dbms.enquiry.main.serviceInterface.CibilScoreFetcher;
-import com.dbms.enquiry.main.serviceInterface.EmailDetails;
 import com.dbms.enquiry.main.serviceInterface.MainServiceInterface;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -77,7 +77,7 @@ public class MainServiceImpl implements MainServiceInterface {
 	        // Send confirmation email
 	        if (savedEnquiry != null) {
 	            try {
-	                emailDetails.sendEnquiryConfirmation(savedEnquiry, savedEnquiry.getCibilDetails());
+	                emailDetails.sendEnquiryConfirmation(savedEnquiry);
 	                log.info("Enquiry confirmation email sent successfully.");
 	            } catch (Exception e) {
 	                log.error("Failed to send enquiry confirmation email: {}", e.getMessage(), e);

@@ -1,4 +1,4 @@
-package com.dbms.enquiry.main.serviceInterface;
+package com.dbms.enquiry.main.mail;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ public class EmailDetails {
 	    @Value("${spring.mail.username}")
 	    private String FROM_MAIL;
 
-	    public void sendEnquiryConfirmation(EnquiryDetails enquiry, CibilDetails cibil) {
+	    public void sendEnquiryConfirmation(EnquiryDetails enquiry) {
 	    	
 	        SimpleMailMessage message = new SimpleMailMessage();
 	        message.setFrom(FROM_MAIL);
@@ -44,13 +44,14 @@ public class EmailDetails {
 	        	    "📅 Enquiry Date: " + enquiry.getEnquiryDate() + "\n" +
 	        	    "⏰ Enquiry Time: " + enquiry.getEnquiryTime() + "\n" +
 	        	    "📊 Enquiry Status: " + enquiry.getEnquriyStatus() + "\n\n" +
-	        	//    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+	        	    
+	        	/*//    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
 	        	    "📌 CIBIL Details : \n" +
 	                  "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
 	        	    "🆔 CIBIL ID: " + cibil.getCibilId() + "\n" +
 	        	    "📊 CIBIL Score: " + cibil.getCibilScore() + "\n" +
 	        	    "📂 Score Category: " + cibil.getScoreCategories() + "\n" +
-	        	    "📝 Remarks: " + cibil.getRemarks() + "\n\n" +
+	        	    "📝 Remarks: " + cibil.getRemarks() + "\n\n" +*/
 	        	    
 	        	    "Our team will review your request and get back to you as soon as possible.ANd We appreciate your interest and look forward to assisting you!.\n"+
 	        	    "📢 Note: If you have any questions or require further assistance, please feel free to contact our support team.\n\n" +

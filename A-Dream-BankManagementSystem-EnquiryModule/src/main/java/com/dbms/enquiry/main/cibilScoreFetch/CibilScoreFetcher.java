@@ -1,4 +1,4 @@
-package com.dbms.enquiry.main.serviceInterface;
+package com.dbms.enquiry.main.cibilScoreFetch;
 
 import java.util.Random;
 
